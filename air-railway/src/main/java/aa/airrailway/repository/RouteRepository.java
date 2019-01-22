@@ -9,8 +9,10 @@ import java.util.List;
 @Repository
 public interface RouteRepository extends CrudRepository<RouteEntity, Integer> {
 
+	RouteEntity findById(Long id);
 
 	List<RouteEntity> findAll();
+
 	List<RouteEntity> findAllByDepartureTimeAfterAndStartCity(Long date, String city);
 
 }

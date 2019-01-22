@@ -16,9 +16,12 @@ public class ConnectionService {
 
 
 	@Transactional
-	public List<ConnectionDTO> findAllConnections(RouteDTO firstRoute, String destination) {
+	public List<ConnectionDTO> findAllConnections(Long firstRouteId, String destination) {
 		List<ConnectionDTO> connections = new LinkedList<>();
 		ConnectionDTO connection = new ConnectionDTO();
+		RouteEntity entity = this.routeRepository.findById(firstRouteId);
+		//TODO check for null
+		RouteDTO firstRoute = entity.convertToDTO();
 		connection.setFirstRoute(firstRoute);
 		List<RouteDTO> routes = new LinkedList<>();
 		List<RouteEntity> routeEntities = this.routeRepository.findAllByDepartureTimeAfterAndStartCity
@@ -27,8 +30,8 @@ public class ConnectionService {
 			connection.setSecondRoute(route.convertToDTO());
 			Time difference = new Time();
 			Long diff = connection.getSecondRoute().getDepartureTime() - connection.getFirstRoute().getArrivalTime();
-			difference.setMinutes(diff %3600/60);
-			difference.setHours(diff/3600);
+			difference.setMinutes(diff % 3600 / 60);
+			difference.setHours(diff / 3600);
 			connection.setDifference(difference);
 			connections.add(connection);
 		}
